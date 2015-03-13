@@ -4,7 +4,7 @@ module Policies
   class Application < Sinatra::Base
     get '/' do
       state = params[:state]
-      policies = Database.connection[:policies]
+      policies = db[:policies]
       policies = policies.where(state: state) unless state.nil?
       haml :index, locals: { policies: policies, active_state: params[:state] }
     end
@@ -14,25 +14,27 @@ module Policies
     end
 
     get '/policies/:policy_id' do
-      policy = Database.connection[:policies][id: params[:policy_id]]
-      haml :view, locals: { policy: policy }
+      policy_id = params[:policy_id]
+      policy = db[:policies][id: policy_id]
+      policy_state_changes = db[:policy_state_changes].where(policy_id: policy_id).all
+      haml :view, locals: { policy: policy, policy_state_changes: policy_state_changes }
     end
 
     post '/policies/:policy_id' do
-      policy_id = params[:policy_id]
-      Database.connection[:policies].where(id: policy_id).update(
-        state: params[:policy][:state]
+      UpdatePolicy.call(
+        policy_id: params[:policy_id],
+        policy_attributes: params[:policy]
       )
-      redirect to("/policies/#{policy_id}")
+      redirect to("/policies/#{params[:policy_id]}")
     end
     
     get '/policies/:policy_id/edit' do
-      policy = Database.connection[:policies][id: params[:policy_id]]
+      policy = db[:policies][id: params[:policy_id]]
       haml :edit, locals: { policy: policy }
     end
 
     post '/policies' do
-      Database.connection[:policies].insert(
+      db[:policies].insert(
         title: params[:policy][:title],
         description: params[:policy][:description],
         created_at: Time.new,
@@ -42,6 +44,10 @@ module Policies
     end
 
     helpers do
+      def db
+        Database.connection
+      end
+
       def policy_states
         {
           'proposal' => [ 'Proposal', 'default' ],
@@ -51,7 +57,7 @@ module Policies
       end
 
       def label_class_for_policy_state(state)
-        policy_states[state][1]
+        "label-#{policy_states[state][1]}"
       end
 
       def humanize_policy_state(state)

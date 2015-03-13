@@ -1,6 +1,8 @@
 %h1
   Edit "#{policy[:title]}"
-  %span.pull-right.label{ class: "label-#{label_class_for_policy_state(policy[:state])}" }
+
+%div
+  %span.label{ class: label_class_for_policy_state(policy[:state]) }
     = humanize_policy_state(policy[:state])
 
 %h2= policy[:description]
@@ -14,3 +16,5 @@
 
   %div
     %button.btn.btn-default{ type: "submit" } Update Policy
+    &nbsp;
+    %a{ href: "/policies/#{policy[:id]}"} cancel

@@ -19,13 +19,13 @@ database_cleaner = DatabaseCleaner[
 
 # autoload :WaitForAjax, './spec/support/wait_for_ajax'
 
-# module Policies
-#   autoload :Factories, './spec/support/factories'
-# end
+module Policies
+  autoload :Factories, './spec/support/factories'
+end
 
 RSpec.configure do |config|
   # config.include WaitForAjax, js: true
-  # config.include Policies::Factories
+  config.include Policies::Factories
 
   config.before(:suite) do
     database_cleaner.clean_with(:truncation)

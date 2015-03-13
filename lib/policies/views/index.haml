@@ -14,7 +14,7 @@
         %li.list-group-item
           .row
             .col-xs-3.col-sm-2
-              %span.label{ class: "label-#{label_class_for_policy_state(policy[:state])}" }
+              %span.label{ class: label_class_for_policy_state(policy[:state]) }
                 = humanize_policy_state(policy[:state])
             .col-xs-7.col-sm-9
               = policy[:title]
