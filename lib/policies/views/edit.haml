@@ -1,0 +1,16 @@
+%h1
+  Edit "#{policy[:title]}"
+  %span.pull-right.label{ class: "label-#{label_class_for_policy_state(policy[:state])}" }
+    = humanize_policy_state(policy[:state])
+
+%h2= policy[:description]
+
+%form{ action: "/policies/#{policy[:id]}", method: 'post' }
+  .form-group
+    %label.control-label{ for: 'policy_policy_state' } Status
+    %select.form-control{ id: 'policy_policy_state', name: 'policy[state]' }
+      - policy_states.each do |value, text|
+        %option{ value: value }= humanize_policy_state(value)
+
+  %div
+    %button.btn.btn-default{ type: "submit" } Update Policy

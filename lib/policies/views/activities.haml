@@ -1,0 +1,9 @@
+%h1
+  Recorded Activities
+  %small= date
+  
+%ul.list-group
+- activity_records.each do |activity_record|
+  %li.list-group-item
+    %span.glyphicon.glyphicon-ok
+    = activity_record[:activity_name]

@@ -1,0 +1,8 @@
+%h1
+  = policy[:title]
+  %span.pull-right.label{ class: "label-#{label_class_for_policy_state(policy[:state])}" }
+    = humanize_policy_state(policy[:state])
+
+%p= policy[:description]
+
+%a.btn.btn-default{ href: "/policies/#{policy[:id]}/edit" } Edit

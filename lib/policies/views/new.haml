@@ -1,0 +1,11 @@
+%form{ action: '/policies', method: 'post' }
+  .form-group
+    %label.control-label{ for: 'policy_policy_title' } Title
+    %input.form-control{ type: 'text', id: 'policy_policy_title', name: 'policy[title]' }
+
+  .form-group
+    %label.control-label{ for: 'policy_policy_description' } Description
+    %textarea.form-control{ type: 'text', id: 'policy_policy_description', name: 'policy[description]' }
+
+  %div
+    %button.btn.btn-default{ type: "submit" } Create Policy

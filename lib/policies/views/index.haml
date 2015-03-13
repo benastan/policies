@@ -1,0 +1,22 @@
+.row
+  .col-sm-2
+    %ul.nav.nav-stacked.nav-pills
+      %li{ class: "#{'active' if active_state.nil?}", role: "presentation" }
+        %a{ href: '?' } All
+
+      - policy_states.each do |state, value|
+        %li{ class: "#{'active' if state == active_state}", role: "presentation" }
+          %a{ href: "?state=#{state}" }= humanize_policy_state(state)
+
+  .col-sm-10
+    %ul.list-group
+      - policies.each do |policy|
+        %li.list-group-item
+          .row
+            .col-xs-3.col-sm-2
+              %span.label{ class: "label-#{label_class_for_policy_state(policy[:state])}" }
+                = humanize_policy_state(policy[:state])
+            .col-xs-7.col-sm-9
+              = policy[:title]
+            .col-xs-1
+              %a.pull-right{ href: "/policies/#{policy[:id]}" } view
