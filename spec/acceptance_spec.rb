@@ -5,6 +5,12 @@ describe 'Policies', js: true do
 
   specify do
     visit '/'
+
+    click_on 'Projects'
+    click_on 'New Project'
+    fill_in 'Title', with: 'My Startup'
+    click_on 'Create Project'
+    click_on 'view'
     click_on 'New Policy'
     fill_in 'Title', with: 'Socialize schema changes'
     fill_in 'Description', with: 'Schema changes are difficult to reverse. Before making schema changes, discuss them with other members of the team.'
@@ -42,6 +48,7 @@ describe 'Policies', js: true do
       expect(policy_state_change_dates).to eq [ 'January 23, 2014', 'January 24, 2014' ]
     end
 
+    click_on 'My Startup'
     click_on 'New Policy'
     fill_in 'Title', with: 'Pair full time'
     fill_in 'Description', with: 'Pairing prevents siloing and speeds up the feedback loop.'
@@ -60,8 +67,7 @@ describe 'Policies', js: true do
     click_on 'Edit'
     select 'Experiment', from: 'Status'
     click_on 'Update Policy'
-
-    click_on 'Policies'
+    click_on 'My Startup'
     click_on 'Proposal'
     expect(page).to_not have_content('Socialize schema changes')
     expect(page).to_not have_content('Daily stand up at 9:11am')
@@ -81,5 +87,23 @@ describe 'Policies', js: true do
     expect(page).to have_content('Socialize schema changes')
     expect(page).to have_content('Daily stand up at 9:11am')
     expect(page).to have_content('Pair full time')
+
+    click_on 'Projects'
+    click_on 'New Project'
+    fill_in 'Title', with: 'My Other Startup'
+    click_on 'Create Project'
+    within '.list-group-item', text: 'My Other Startup' do
+      click_on 'view'
+    end
+    
+    click_on 'New Policy'
+    fill_in 'Title', with: 'Discuss pain points in a weekly retro'
+    fill_in 'Description', with: 'Discussing pain points as they arise can be noisy and ineffective. Pain points should be discussed weekly during a dedicated meeting.'
+    click_on 'Create Policy'
+    
+    expect(page).to have_content('Discuss pain points in a weekly retro')
+    expect(page).to_not have_content('Socialize schema changes')
+    expect(page).to_not have_content('Daily stand up at 9:11am')
+    expect(page).to_not have_content('Pair full time')
   end
 end

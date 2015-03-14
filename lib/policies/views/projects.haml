@@ -1,0 +1,7 @@
+%ul.list-group
+  - projects.each do |project|
+    %li.list-group-item
+      = project[:title]
+      %a.pull-right{ href: "/projects/#{project[:id]}" } view
+
+%a{ href: '/projects/new' } New Project

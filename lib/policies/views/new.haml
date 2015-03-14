@@ -1,11 +1,15 @@
-%form{ action: '/policies', method: 'post' }
-  .form-group
-    %label.control-label{ for: 'policy_policy_title' } Title
-    %input.form-control{ type: 'text', id: 'policy_policy_title', name: 'policy[title]' }
+.page-header
+  %h1 New Policy
+  
+%ol.breadcrumb
+  %li
+    %a{ href: "/projects/#{project[:id]}" }= project[:title]
 
-  .form-group
-    %label.control-label{ for: 'policy_policy_description' } Description
-    %textarea.form-control{ type: 'text', id: 'policy_policy_description', name: 'policy[description]' }
+  %li.active New Policy
+
+%form{ action: "/projects/#{project[:id]}/policies", method: 'post' }
+  = haml :text_input, locals: { record_type: 'policy', attribute: 'title', label: 'Title' }
+  = haml :text_input, locals: { record_type: 'policy', attribute: 'description', label: 'Description', textarea: true }
 
   %div
     %button.btn.btn-default{ type: "submit" } Create Policy

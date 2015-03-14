@@ -1,4 +1,11 @@
-%h1= policy[:title]
+.page-header
+  %h1= policy[:title]
+
+%ol.breadcrumb
+  %li
+    %a{ href: "/projects/#{project[:id]}" }= project[:title]
+
+  %li.active= policy[:title]
 
 %div
   %span.label{ class: label_class_for_policy_state(policy[:state]) }
@@ -6,17 +13,18 @@
 
 %p= policy[:description]
 
-%h4 Status Changes
-%ul.list-group
-  - policy_state_changes.each do |policy_state_change|
-    %li.list-group-item
-      .row
-        .col-sm-2
-          %small= policy_state_change[:created_at].strftime('%B %d, %Y')
-        .col-sm-10
-          Status changed from
-          %span.label{ class: label_class_for_policy_state(policy_state_change[:previous_state]) }= humanize_policy_state policy_state_change[:previous_state]
-          to
-          %span.label{ class: label_class_for_policy_state(policy_state_change[:new_state]) }= humanize_policy_state policy_state_change[:new_state]
+- if  policy_state_changes.any?
+  %h4 Status Changes
+  %ul.list-group
+    - policy_state_changes.each do |policy_state_change|
+      %li.list-group-item
+        .row
+          .col-sm-2
+            %small= policy_state_change[:created_at].strftime('%B %d, %Y')
+          .col-sm-10
+            Status changed from
+            %span.label{ class: label_class_for_policy_state(policy_state_change[:previous_state]) }= humanize_policy_state policy_state_change[:previous_state]
+            to
+            %span.label{ class: label_class_for_policy_state(policy_state_change[:new_state]) }= humanize_policy_state policy_state_change[:new_state]
 
 %a.btn.btn-default{ href: "/policies/#{policy[:id]}/edit" } Edit
