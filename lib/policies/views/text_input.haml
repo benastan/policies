@@ -1,6 +1,0 @@
-.form-group
-  %label.control-label{ for: "#{record_type}_#{attribute}" } #{label}
-  - if locals[:textarea] == true
-    %textarea.form-control{ type: 'text', id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]" }
-  - else
-    %input.form-control{ type: "text", id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]" }

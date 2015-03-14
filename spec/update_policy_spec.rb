@@ -3,7 +3,7 @@ require 'spec_helper'
 module Policies
   describe UpdatePolicy do
     let!(:policy) { create_policy(title: 'Some Policy') }
-    let(:policy_attributes) { { state: 'experiment' } }
+    let(:policy_attributes) { { state: 'experiment', title: 'The Policy', description: 'Policies are great!' } }
 
     subject { UpdatePolicy.call(policy_id: policy[:id], policy_attributes: policy_attributes) }
 
@@ -12,6 +12,20 @@ module Policies
         to change { Database.connection[:policies][id: policy[:id]][:state] }.
         from('proposal').
         to('experiment')
+    end
+
+    specify do
+      expect{subject}.
+        to change { Database.connection[:policies][id: policy[:id]][:title] }.
+        from('Some Policy').
+        to('The Policy')
+    end
+
+    specify do
+      expect{subject}.
+        to change { Database.connection[:policies][id: policy[:id]][:description] }.
+        from(nil).
+        to('Policies are great!')
     end
 
     specify do
@@ -32,12 +46,26 @@ module Policies
     end
 
     context 'when the state has not changed' do
-      let(:policy_attributes) { { state: 'proposal' } }
+      before { policy_attributes[:state] = 'proposal' }
     
       specify do
         expect{subject}.
           to_not change { Database.connection[:policies][id: policy[:id]][:state] }.
           from('proposal')
+      end
+
+      specify do
+        expect{subject}.
+          to change { Database.connection[:policies][id: policy[:id]][:title] }.
+          from('Some Policy').
+          to('The Policy')
+      end
+
+      specify do
+        expect{subject}.
+          to change { Database.connection[:policies][id: policy[:id]][:description] }.
+          from(nil).
+          to('Policies are great!')
       end
 
       specify do

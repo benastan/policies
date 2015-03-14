@@ -1,0 +1,14 @@
+- record = locals[:record] || {}
+.form-group
+  %label.control-label{ for: "#{record_type}_#{attribute}" } #{label}
+  - if locals[:textarea] == true
+    %textarea.form-control{ type: 'text', id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]" }= record[attribute]
+  - elsif locals[:select] == true
+    %select.form-control{ type: 'text', id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]" }
+      - options.each do |(value, label)|
+        - if record[attribute] == value
+          %option{ value: value, selected: 'selected' }= label
+        - else
+          %option{ value: value }= label
+  - else
+    %input.form-control{ type: "text", id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]", value: record[attribute] }

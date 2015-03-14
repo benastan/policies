@@ -3,17 +3,35 @@
 
 %ol.breadcrumb
   %li
-    %a{ href: "/projects/#{project[:id]}" }= project[:title]
+    %a{ href: "/projects" } Projects
+  %li
+    %a{ href: "/projects/#{project[:id]}" }
+      = project[:title]
+  %li
+    %a{ href: "/projects/#{project[:id]}?state=#{policy[:state]}" }
+      = humanize_policy_state(policy[:state])
+  %li.active
+    = policy[:title]
 
-  %li.active= policy[:title]
+%h4 Details
+%ul.list-group
+  %li.list-group-item
+    .row
+      .col-sm-2
+        %small Status
+      .col-sm-10
+        %span.label{ class: label_class_for_policy_state(policy[:state]) }
+          = humanize_policy_state(policy[:state])
 
-%div
-  %span.label{ class: label_class_for_policy_state(policy[:state]) }
-    = humanize_policy_state(policy[:state])
+  - if policy[:description] != ''
+    %li.list-group-item
+      .row
+        .col-sm-2
+          %small Description
+        .col-sm-10
+          = policy[:description]
 
-%p= policy[:description]
-
-- if  policy_state_changes.any?
+- if policy_state_changes.any?
   %h4 Status Changes
   %ul.list-group
     - policy_state_changes.each do |policy_state_change|

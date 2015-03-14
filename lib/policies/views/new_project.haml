@@ -2,7 +2,7 @@
   %h1 New Project
 
 %form{ action: '/projects', method: 'post' }
-  = haml :text_input, locals: { record_type: 'project', attribute: 'title', label: 'Title' }
+  = haml :input, locals: { record_type: 'project', attribute: 'title', label: 'Title' }
   
   %div
     %button.btn.btn-default{ type: "submit" } Create Project

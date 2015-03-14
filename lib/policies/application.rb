@@ -16,12 +16,10 @@ module Policies
     end
 
     get '/projects/:project_id' do
-      project_id = params[:project_id]
-      project = db[:projects][id: project_id]
       state = params[:state]
-      policies = db[:policies].where(project_id: project_id)
+      policies = db[:policies].where(project_id: project[:id])
       policies = policies.where(state: state) unless state.nil?
-      haml :index, locals: { project: project, policies: policies, active_state: params[:state] }
+      haml :index, locals: { policies: policies, active_state: params[:state] }
     end
 
     post '/projects' do
@@ -35,17 +33,12 @@ module Policies
     end
 
     get '/projects/:project_id/policies/new' do
-      project_id = params[:project_id]
-      project = db[:projects][id: project_id]
-      haml :new, locals: { project: project }
+      haml :new
     end
 
     get '/policies/:policy_id' do
-      policy_id = params[:policy_id]
-      policy = db[:policies][id: policy_id]
-      project = db[:projects][id: policy[:project_id]]
-      policy_state_changes = db[:policy_state_changes].where(policy_id: policy_id).all
-      haml :view, locals: { policy: policy, policy_state_changes: policy_state_changes, project: project }
+      policy_state_changes = db[:policy_state_changes].where(policy_id: policy[:id]).all
+      haml :view, locals: { policy: policy, policy_state_changes: policy_state_changes }
     end
 
     post '/policies/:policy_id' do
@@ -78,6 +71,20 @@ module Policies
         Database.connection
       end
 
+      def policy
+        @policy ||= db[:policies][id: params[:policy_id]]
+      end
+
+      def project
+        @project ||= (
+          if params[:project_id]
+            db[:projects][id: params[:project_id]]
+          elsif params[:policy_id]
+            db[:projects][id: policy[:project_id]]
+          end
+        )
+      end
+
       def policy_states
         {
           'proposal' => [ 'Proposal', 'default' ],
@@ -85,6 +92,12 @@ module Policies
           'policy' => [ 'Policy', 'success' ],
           'abandoned' => [ 'Abandoned', 'danger' ]
         }
+      end
+
+      def policy_states_options
+        policy_states.map do |(state, data)|
+          [ state, data[0] ]
+        end
       end
 
       def label_class_for_policy_state(state)

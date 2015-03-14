@@ -3,13 +3,15 @@
   
 %ol.breadcrumb
   %li
+    %a{ href: "/projects" } Projects
+  %li
     %a{ href: "/projects/#{project[:id]}" }= project[:title]
 
   %li.active New Policy
 
 %form{ action: "/projects/#{project[:id]}/policies", method: 'post' }
-  = haml :text_input, locals: { record_type: 'policy', attribute: 'title', label: 'Title' }
-  = haml :text_input, locals: { record_type: 'policy', attribute: 'description', label: 'Description', textarea: true }
+  = haml :input, locals: { record_type: 'policy', attribute: 'title', label: 'Title' }
+  = haml :input, locals: { record_type: 'policy', attribute: 'description', label: 'Description', textarea: true }
 
   %div
     %button.btn.btn-default{ type: "submit" } Create Policy

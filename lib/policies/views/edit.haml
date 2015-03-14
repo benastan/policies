@@ -1,18 +1,26 @@
-%h1
-  Edit "#{policy[:title]}"
+.page-header
+  %h1
+    Edit "#{policy[:title]}"
 
-%div
-  %span.label{ class: label_class_for_policy_state(policy[:state]) }
-    = humanize_policy_state(policy[:state])
-
-%h2= policy[:description]
+%ol.breadcrumb
+  %li
+    %a{ href: "/projects" } Projects
+  %li
+    %a{ href: "/projects/#{project[:id]}" }
+      = project[:title]
+  %li
+    %a{ href: "/projects/#{project[:id]}?state=#{policy[:state]}" }
+      = humanize_policy_state(policy[:state])  
+  %li
+    %a{ href: "/policies/#{policy[:id]}" }
+      = policy[:title]
+  %li.active
+    Edit
 
 %form{ action: "/policies/#{policy[:id]}", method: 'post' }
-  .form-group
-    %label.control-label{ for: 'policy_policy_state' } Status
-    %select.form-control{ id: 'policy_policy_state', name: 'policy[state]' }
-      - policy_states.each do |value, text|
-        %option{ value: value }= humanize_policy_state(value)
+  = haml :input, locals: { record_type: 'policy', attribute: :title, label: 'Title', record: policy }
+  = haml :input, locals: { record_type: 'policy', attribute: :description, label: 'Description', record: policy, textarea: true }
+  = haml :input, locals: { record_type: 'policy', attribute: :state, label: 'Status', record: policy, select: true, options: policy_states_options }
 
   %div
     %button.btn.btn-default{ type: "submit" } Update Policy

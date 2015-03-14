@@ -1,3 +1,19 @@
+.page-header
+  %h1 Policies
+
+%ol.breadcrumb
+  %li
+    %a{ href: "/projects" } Projects
+  %li
+    %a{ href: "/projects/#{project[:id]}" }= project[:title]
+  - if active_state
+    %li= humanize_policy_state(active_state)
+
+%p.text-right
+  %a.btn.btn-sm.btn-default{href: "/projects/#{project[:id]}/policies/new" }
+    %small.glyphicon.glyphicon-plus
+    New Policy
+
 .row
   .col-sm-2
     %ul.nav.nav-stacked.nav-pills
@@ -22,6 +38,3 @@
                   = policy[:title]
                 .col-xs-1
                   %a.pull-right{ href: "/policies/#{policy[:id]}" } view
-
-    %div
-      %a(href="/projects/#{project[:id]}/policies/new") New Policy
