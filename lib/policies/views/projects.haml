@@ -1,8 +1,6 @@
 %ul.list-group
   - projects.each do |project|
-    %li.list-group-item
-      = project[:title]
-      %a.pull-right{ href: "/projects/#{project[:id]}" } view
+    %a.list-group-item{ href: "/projects/#{project[:id]}" }= project[:title]
 
 %a.btn.btn-default{ href: '/projects/new' }
   %small.glyphicon.glyphicon-plus

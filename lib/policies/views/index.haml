@@ -4,11 +4,13 @@
 %ol.breadcrumb
   %li
     %a{ href: "/projects" } Projects
-  %li
-    %a{ href: "/projects/#{project[:id]}" }= project[:title]
   - if active_state
+    %li
+      %a{ href: "/projects/#{project[:id]}" }= project[:title]
     %li= humanize_policy_state(active_state)
-
+  - else
+    %li= project[:title]
+    
 %p.text-right
   %a.btn.btn-sm.btn-default{href: "/projects/#{project[:id]}/edit" }
     %small.glyphicon.glyphicon-pencil

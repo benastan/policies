@@ -10,7 +10,7 @@ describe 'Policies', js: true do
     click_on 'New Project'
     fill_in 'Title', with: 'My Startup'
     click_on 'Create Project'
-    click_on 'view'
+    click_on 'My Startup'
     click_on 'New Policy'
     fill_in 'Title', with: 'Socialize schema changes'
     fill_in 'Description', with: 'Schema changes are difficult to reverse.'
@@ -102,9 +102,7 @@ describe 'Policies', js: true do
     click_on 'New Project'
     fill_in 'Title', with: 'My Other Startup'
     click_on 'Create Project'
-    within '.list-group-item', text: 'My Other Startup' do
-      click_on 'view'
-    end
+    click_on 'My Other Startup'
     
     click_on 'New Policy'
     fill_in 'Title', with: 'Discuss pain points in a weekly retro'
@@ -116,7 +114,6 @@ describe 'Policies', js: true do
     expect(page).to_not have_content('Daily stand up at 9:11am')
     expect(page).to_not have_content('Pair full time')
 
-    click_on 'My Other Startup'
     click_on 'Edit Project'
     fill_in 'Title', with: 'Our Startup'
     click_on 'Update Project'
