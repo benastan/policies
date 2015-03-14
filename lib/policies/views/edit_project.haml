@@ -1,0 +1,15 @@
+.page-header
+  %h1 Edit Project "#{project[:title]}"
+
+%ol.breadcrumb
+  %li
+    %a{ href: "/projects" } Projects
+  %li
+    %a{ href: "/projects" }= project[:title]
+  %li.active Edit
+
+%form{ action: "/projects/#{project[:id]}", method: 'post' }
+  = haml :input, locals: { record_type: 'project', attribute: :title, label: 'Title', record: project }
+  
+  %div
+    %button.btn.btn-default{ type: "submit" } Update Project

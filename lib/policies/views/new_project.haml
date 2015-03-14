@@ -1,6 +1,11 @@
 .page-header
   %h1 New Project
 
+%ol.breadcrumb
+  %li
+    %a{ href: "/projects" } Projects
+  %li.active New Project
+
 %form{ action: '/projects', method: 'post' }
   = haml :input, locals: { record_type: 'project', attribute: 'title', label: 'Title' }
   

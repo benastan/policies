@@ -32,6 +32,17 @@ module Policies
       redirect to('/projects')
     end
 
+    get '/projects/:project_id/edit' do
+      haml :edit_project
+    end
+
+    post '/projects/:project_id' do
+      project_id = params[:project_id]
+      title = params[:project][:title]
+      db[:projects].where(id: project_id).update(title: title)
+      redirect to("/projects/#{project_id}")
+    end
+
     get '/projects/:project_id/policies/new' do
       haml :new
     end

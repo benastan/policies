@@ -115,5 +115,11 @@ describe 'Policies', js: true do
     expect(page).to_not have_content('Socialize all schema changes')
     expect(page).to_not have_content('Daily stand up at 9:11am')
     expect(page).to_not have_content('Pair full time')
+
+    click_on 'My Other Startup'
+    click_on 'Edit Project'
+    fill_in 'Title', with: 'Our Startup'
+    click_on 'Update Project'
+    expect(page).to have_content 'Our Startup'
   end
 end
