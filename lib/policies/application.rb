@@ -77,11 +77,8 @@ module Policies
 
       def project
         @project ||= (
-          if params[:project_id]
-            db[:projects][id: params[:project_id]]
-          elsif params[:policy_id]
-            db[:projects][id: policy[:project_id]]
-          end
+          project_id = params[:project_id] || policy[:project_id]
+          db[:projects][id: project_id]
         )
       end
 

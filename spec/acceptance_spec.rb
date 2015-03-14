@@ -98,7 +98,7 @@ describe 'Policies', js: true do
     expect(page).to have_content('Daily stand up at 9:11am')
     expect(page).to have_content('Pair full time')
 
-    click_on 'Projects'
+    within('.breadcrumb') { click_on 'Projects'}
     click_on 'New Project'
     fill_in 'Title', with: 'My Other Startup'
     click_on 'Create Project'
