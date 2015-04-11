@@ -33,6 +33,7 @@ describe 'Policies', js: true do
   end
 
   before do
+    page.driver.allow_url("maxcdn.bootstrapcdn.com")
     sign_in(owner)
   end
 
