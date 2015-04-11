@@ -8,8 +8,10 @@
     %a{ href: "/projects" }= project[:title]
   %li.active Edit
 
+%h4 Details
 %form{ action: "/projects/#{project[:id]}", method: 'post' }
   = haml :input, locals: { record_type: 'project', attribute: :title, label: 'Title', record: project }
+  = haml :input, locals: { record_type: 'project', attribute: :collaborator_emails, label: 'Collaborators', record: project, value: (project[:collaborator_emails].join(',') if project[:collaborator_emails]) }
   
   %div
     %button.btn.btn-default{ type: "submit" } Update Project

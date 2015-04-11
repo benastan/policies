@@ -1,13 +1,39 @@
+require 'uri'
+require 'json'
 require 'sinatra/base'
+require 'securerandom'
+require 'faraday'
+require 'pry'
 
 module Policies
   class Application < Sinatra::Base
+    before do
+      unless current_user || request.path == '/oauth/callback'
+        state = SecureRandom.hex
+        session[:auth_state] = state
+        google = Google.new
+        authorization_url = google.authorization_url(state: state)
+        redirect to(authorization_url)
+      end
+    end
+
     get '/' do
       redirect to('/projects')
     end
 
+    get '/oauth/callback' do
+      google = Google.new
+      google.fetch_access_token(code: params['code'])
+      session['user'] = google.me
+      redirect to('projects') 
+    end
+
     get '/projects' do
-      projects = db[:projects].all
+      emails = current_user['emails'].map { |email| email['value'] }
+      id =  current_user['id']
+      projects = db[:projects].where{
+        Sequel.|({user_id: id}, Sequel.pg_array_op(Sequel.pg_array(emails)).overlaps(collaborator_emails))
+      }
       haml :projects, locals: { projects: projects }
     end
 
@@ -27,7 +53,8 @@ module Policies
       db[:projects].insert(
         title: title,
         created_at: Time.new,
-        updated_at: Time.new
+        updated_at: Time.new,
+        user_id: current_user['id']
       )
       redirect to('/projects')
     end
@@ -39,7 +66,10 @@ module Policies
     post '/projects/:project_id' do
       project_id = params[:project_id]
       title = params[:project][:title]
-      db[:projects].where(id: project_id).update(title: title)
+      db[:projects].where(id: project_id).update(
+        title: title,
+        collaborator_emails: Sequel.pg_array(params[:project][:collaborator_emails].split(','), :text)
+      )
       redirect to("/projects/#{project_id}")
     end
 
@@ -75,6 +105,11 @@ module Policies
         updated_at: Time.new
       )
       redirect to("/projects/#{project_id}")
+    end
+
+    get '/logout' do
+      session.delete('users')
+      erb 'Bye!'
     end
 
     helpers do
@@ -115,6 +150,12 @@ module Policies
       def humanize_policy_state(state)
         policy_states[state][0]
       end
+
+      def current_user
+        session['user']
+      end
     end
+    
+    enable :sessions
   end
 end

@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "capybara"
   spec.add_development_dependency "capybara-webkit"
   spec.add_development_dependency "database_cleaner"
-  spec.add_development_dependency "shotgun"
+  spec.add_development_dependency "rerun"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "timecop"
   spec.add_development_dependency "launchy"
@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "foreman"
   spec.add_dependency "haml"
   spec.add_dependency "unicorn"
+  spec.add_dependency "faraday"
 end

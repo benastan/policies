@@ -14,13 +14,18 @@
             %span.icon-bar
             %span.icon-bar
           %a.navbar-brand(href="/") Policies
-
-
         %div.collapse.navbar-collapse#primary-navigation
           %ul.nav.navbar-nav
             %li
               %a(href="/projects") Projects
-
+          .nav.navbar-nav.navbar-right
+            %li
+              %a(href="javascript:void(0)")
+                Welcome, #{current_user['name']['givenName']}!
+            %li
+              %a(href="/logout")
+                Logout
+   
     .container
       = yield
 

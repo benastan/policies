@@ -1,4 +1,6 @@
 - record = locals[:record] || {}
+- value = locals[:value] || record[attribute]
+
 .form-group
   %label.control-label{ for: "#{record_type}_#{attribute}" } #{label}
   - if locals[:textarea] == true
@@ -11,4 +13,4 @@
         - else
           %option{ value: value }= label
   - else
-    %input.form-control{ type: "text", id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]", value: record[attribute] }
+    %input.form-control{ type: "text", id: "#{record_type}_#{attribute}", name: "#{record_type}[#{attribute}]", value: value }

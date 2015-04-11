@@ -3,9 +3,42 @@ require 'spec_helper'
 describe 'Policies', js: true do
   include Capybara::DSL
 
+  let(:owner) do
+    {
+      'id' => '12331',
+      'name' => {
+        'givenName' => 'Owner'
+      },
+      'emails' => [
+        { 'value' => 'owner@example.com' }
+      ]
+    }
+  end
+
+  let(:colleague) do
+    {
+      'id' => '91234',
+      'name' => {
+        'givenName' => 'Colleague'
+      },
+      'emails' => [
+        { 'value' => 'colleague@example.com' }
+      ]
+    }
+  end
+
+  def sign_in(user)
+    allow_any_instance_of(Policies::Application).to receive(:current_user).and_call_original
+    allow_any_instance_of(Policies::Application).to receive(:current_user).and_return(user)
+  end
+
+  before do
+    sign_in(owner)
+  end
+
   specify do
     visit '/'
-
+    expect(page).to have_content 'Owner'
     click_on 'Projects'
     click_on 'New Project'
     fill_in 'Title', with: 'My Startup'
@@ -117,6 +150,22 @@ describe 'Policies', js: true do
     click_on 'Edit Project'
     fill_in 'Title', with: 'Our Startup'
     click_on 'Update Project'
+    expect(page).to have_content 'Our Startup'
+
+    sign_in(colleague)
+    visit '/projects'
+    expect(page).to_not have_content 'Our Startup'
+
+    sign_in(owner)
+    visit '/projects'
+    click_on 'Our Startup'
+    click_on 'Edit Project'
+    fill_in 'Collaborators', with: 'colleague@example.com'
+    click_on 'Update Project'
+    click_on 'Edit Project'
+    expect(find_field('Collaborators').value).to eq 'colleague@example.com'
+
+    sign_in(colleague)
     expect(page).to have_content 'Our Startup'
   end
 end
