@@ -3,7 +3,6 @@ require 'json'
 require 'sinatra/base'
 require 'securerandom'
 require 'faraday'
-require 'pry'
 
 module Policies
   class Application < Sinatra::Base
@@ -108,7 +107,7 @@ module Policies
     end
 
     get '/logout' do
-      session.delete('users')
+      session.delete('user')
       erb 'Bye!'
     end
 
